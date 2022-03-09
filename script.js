@@ -14,4 +14,20 @@ const Game = new (function(){
         (first === SCISSORS && second === PAPER) || 
         (first === PAPER && second === ROCK);
     };
+
+    const sanitizePlayerInput = function(input){
+        input = input.toLowerCase();
+        const isValid = input === ROCK || input === SCISSORS || input === PAPER;
+        return {input, isValid};
+    };
+
+    const playRound = function(playerSelection, computerSelection){
+        const playerWins = doesFirstBeatSecond(playerSelection, computerSelection);
+        if(playerWins) return `You win! ${playerSelection} beats ${computerSelection}.`;
+        
+        const computerWins = doesFirstBeatSecond(computerSelection, p);
+        if(computerWins) return `You lose! ${computerSelection} beats ${playerSelection}`;
+        
+        return "It's a draw!";
+    };
 })();
