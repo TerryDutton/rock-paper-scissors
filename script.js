@@ -23,7 +23,7 @@ const RockPaperScissors = new (function(){
         return choices[random];
     };
 
-    this.determineVictor = (selection_player1, selection_player2) => {
+    this.playRound = (selection_player1, selection_player2) => {
         const isValid_Input1 = this.isInputValid(selection_player1);
         const isValid_Input2 = this.isInputValid(selection_player2);
         
@@ -31,6 +31,23 @@ const RockPaperScissors = new (function(){
             p1_victory: whatDoesThisBeat[selection_player1] === selection_player2,
             p2_victory: whatDoesThisBeat[selection_player2] === selection_player1
         };
-        else throw new TypeError("Inputs were invalid");
+        else throw new TypeError("Inputs were invalid: choices are " + choices);
     };
 })();
+
+const RPS_ConsoleGame = new (function(RPS){
+    const getChoiceFromPlayer = function(player){
+        while(true){
+            const input = prompt(`Player ${player}, what do you choose?`).toLowerCase();
+            const isValid = RPS.isInputValid(input);
+            if(!isValid) alert(`'${input}' is not a valid choice ):`);
+            else return input;
+        }
+    };
+
+    const getPlayerChoices = function(is2Player){
+        const p1Choice = getChoiceFromPlayer(1);
+        const p2Choice = is2Player ? getChoiceFromPlayer(2) : RPS.getRandomChoice();
+        return {p1Choice, p2Choice};
+    };
+})(RockPaperScissors);
