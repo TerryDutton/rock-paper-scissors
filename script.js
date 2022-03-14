@@ -64,7 +64,7 @@ const RPS_ConsoleGame = new (function(RPS){
         return  `${score_p1} to ${score_p2}! It's a tie!`;
     };
 
-    this.play = function({is2Player = false, rounds = 5}){
+    this.play = function(is2Player = false, rounds = 5){
         let score_p1 = 0;
         let score_p2 = 0; 
 
