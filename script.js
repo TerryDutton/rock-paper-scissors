@@ -75,9 +75,9 @@ const RPS_ConsoleGame = new (function(RPS){
             score_p1 += p1_victory;
             score_p2 += p2_victory;
             
-            if (p1_victory) console.log(roundResultMessage(1, p1Choice, p2Choice));
-            else if (p2_victory) console.log(roundResultMessage(2, p2Choice, p1Choice));
-            else console.log("It's a draw!");
+            if (p1_victory) alert(roundResultMessage(1, p1Choice, p2Choice));
+            else if (p2_victory) alert(roundResultMessage(2, p2Choice, p1Choice));
+            else alert(`${capitalize(p1Choice)} to ${p2Choice}! It's a tie!`);
         }
 
         const result = getGameResultsMessage(score_p1, score_p2);
