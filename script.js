@@ -4,6 +4,10 @@ const RockPaperScissors = new (function(){
     const PAPER = "paper";
     const SCISSORS = "scissors";
 
+    this.rock = ROCK;
+    this.paper = PAPER;
+    this.scissors = SCISSORS;
+
     const choices = [ROCK, PAPER, SCISSORS];
 
     const whatDoesThisBeat = {
@@ -82,5 +86,47 @@ const RPS_ConsoleGame = new (function(RPS){
 
         const result = getGameResultsMessage(score_p1, score_p2);
         alert(result);
+    };
+})(RockPaperScissors);
+
+const RPS_DomGame = new (function(RPS){
+    this.rock = RPS.rock;
+    this.paper = RPS.paper;
+    this.scissors = RPS.scissors;
+
+    return function({rounds, onRoundComplete}){
+        let p1Score = 0, p2Score = 0, roundChoices = [];
+
+        this.reset = function(){
+            p1Score = 0;
+            p2Score = 0;
+            roundChoices = [];
+        };
+
+        this.playRound = function(choice){
+            const roundsPlayed = roundChoices.length;
+            if(roundsPlayed >= rounds) throw new Error("This game is over; please call reset().");
+            
+            const computerChoice = RPS.getRandomChoice();
+            const {p1_victory, p2_victory} = RPS.playRound(choice, computerChoice);
+            p1Score += p1_victory;
+            p2Score += p2_victory;
+            roundChoices.push({p1: choice, p2: computerChoice});
+            roundsPlayed++;
+
+            const results = {
+                p1WinsThisRound: p1_victory,
+                p2WinsThisRound: p2_victory,
+                p1ChoiceThisRound: choice,
+                p2ChoiceThisRound: computerChoice,
+                allPlayerChoices: playerChoices.slice(),
+                p1Score,
+                p2Score,
+                roundsPlayed,
+                roundsRemaining: rounds - roundsPlayed
+            };
+
+            onRoundComplete(results);
+        };
     };
 })(RockPaperScissors);
