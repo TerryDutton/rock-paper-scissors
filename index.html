@@ -5,15 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./RockPaperScissors.js"></script>
+    <script src="./DomGameHandler.js"></script>
     <title>Rock-Paper-Scissors</title>
 </head>
 <body>
     <h1>Rock-Paper-Scissors DOM version</h1>
     <h3>Choose your weapon:</h3>
     <div>
-        <button>Rock</button>
-        <button>Paper</button>
-        <button>Scissors</button>
+        <button id="rock-button">Rock</button>
+        <button id="paper-button">Paper</button>
+        <button id="scissors-button">Scissors</button>
     </div>
     <div id="round-results">
 
@@ -22,7 +23,19 @@
 
     </div>
     <script>
+        (function(){
+            const messageDivs = {
+                roundResultsDiv: document.getElementById('round-results'), 
+                finalResultsDiv: document.getElementById('final-results')
+            };
+            const handler = getRoundHandler(messageDivs);
+            const game = new RPS_DomGame(5, handler);
 
+            ["rock", "paper", "scissors"].forEach(function(choice){
+                const button = document.getElementById(`${choice}-button`);
+                button.addEventListener('click', () => game.playRound(choice));
+            });
+        })();
     </script>
 </body>
 </html>

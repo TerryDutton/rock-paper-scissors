@@ -94,7 +94,8 @@ const RPS_DomGame = new (function(RPS){
     this.paper = RPS.paper;
     this.scissors = RPS.scissors;
 
-    return function({rounds, onRoundComplete}){
+    return function(rounds, onRoundComplete){
+        if (rounds <= 0) throw new Error("Must have at least one round");
         let p1Score = 0, p2Score = 0, roundChoices = [];
 
         this.reset = function(){
@@ -104,26 +105,25 @@ const RPS_DomGame = new (function(RPS){
         };
 
         this.playRound = function(choice){
-            const roundsPlayed = roundChoices.length;
-            if(roundsPlayed >= rounds) throw new Error("This game is over; please call reset().");
+            const gameIsOver = p1Score >= rounds || p2Score >= rounds;
+            if(gameIsOver) throw new Error("This game is over; please call reset().");
             
             const computerChoice = RPS.getRandomChoice();
             const {p1_victory, p2_victory} = RPS.playRound(choice, computerChoice);
             p1Score += p1_victory;
             p2Score += p2_victory;
             roundChoices.push({p1: choice, p2: computerChoice});
-            roundsPlayed++;
 
             const results = {
                 p1WinsThisRound: p1_victory,
                 p2WinsThisRound: p2_victory,
                 p1ChoiceThisRound: choice,
                 p2ChoiceThisRound: computerChoice,
-                allPlayerChoices: playerChoices.slice(),
+                allPlayerChoices: roundChoices.slice(),
                 p1Score,
                 p2Score,
-                roundsPlayed,
-                roundsRemaining: rounds - roundsPlayed
+                scoreToWin: rounds,
+                gameIsOver: p1Score >= rounds || p2Score >= rounds
             };
 
             onRoundComplete(results);
